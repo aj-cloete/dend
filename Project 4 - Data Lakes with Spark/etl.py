@@ -161,8 +161,8 @@ def main():
     Run the ETL to process the song_data and the log_data files
     """
     spark = create_spark_session()
-    input_data = 'data/' #"s3a://udacity-dend/"
-    output_data = ""
+    input_data = "s3a://udacity-dend/"
+    output_data = "todo"
     
     process_song_data(spark, input_data, output_data)    
     process_log_data(spark, input_data, output_data)
