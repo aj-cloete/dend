@@ -78,7 +78,7 @@ def process_song_data(spark, input_data, output_data):
     df = spark.read.json(song_data)
 
     # extract columns to create songs table
-    songs_table = df.select(['song_id','title','artist_id','year','duration'])
+    songs_table = df.select(['song_id','title','artist_id','year','duration']).distinct()
 
     # write songs table to parquet files partitioned by year and artist
     songs_table.write.parquet(output_data+'songs/'+'songs_table.parquet',
@@ -89,7 +89,7 @@ def process_song_data(spark, input_data, output_data):
                     .withColumnRenamed('artist_name','artist') \
                     .withColumnRenamed('artist_location','location') \
                     .withColumnRenamed('artist_longitude','longitude') \
-                    .withColumnRenamed('artist_latitude','latitude')
+                    .withColumnRenamed('artist_latitude','latitude').distinct()
 
     # write artists table to parquet files
     artists_table.write.parquet(output_data+'artists/'+'artists_table.parquet')
@@ -149,7 +149,7 @@ def process_log_data(spark, input_data, output_data):
                         'sessionId as session_id',
                         'location',
                         'userAgent as user_agent']
-    songplays_table = joined.withColumn('songplay_id', F.monotonically_increasing_id()) \
+    songplays_table = joined.distinct().withColumn('songplay_id', F.monotonically_increasing_id()) \
                         .selectExpr(*songplay_selects)
 
     # write songplays table to parquet files partitioned by year and month
