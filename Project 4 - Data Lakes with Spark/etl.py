@@ -144,6 +144,8 @@ def process_log_data(spark, input_data, output_data):
                      how='inner')
     songplay_selects = ['songplay_id',
                         'timestamp as start_time',
+                        'extract(month from timestamp) as month',
+                        'extract(year from timestamp) as year',
                         'userId as user_id',
                         'level','song_id','artist_id',
                         'sessionId as session_id',
@@ -153,7 +155,7 @@ def process_log_data(spark, input_data, output_data):
                         .selectExpr(*songplay_selects)
 
     # write songplays table to parquet files partitioned by year and month
-    # songplays_table.write.parquet(output_data+'songplays/'+'songplays.parquet')
+    # songplays_table.write.parquet(output_data+'songplays/'+'songplays.parquet', partitionBy=['year','month'])
 
 
 def main():
