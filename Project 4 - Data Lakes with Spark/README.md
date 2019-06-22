@@ -63,11 +63,9 @@ The unneccessary columns/joins can be removed and the relevant group by and aggr
 
 ## Technical details
 #### What's in this repository?
-1. [dwh.cfg](./dwh.cfg) contains the configuration settings for the database. More on config later.
+1. [dl.cfg](./dl.cfg) contains the configuration settings for the database. More on config later.
 2. [infrastructure_as_code.py](./infrastructure_as_code.py) contains all the steps to set up the necessary infrastructure (Redshift cluster, AWS Role with attached policies, etc.)
-3. [sql_queries.py](./sql_queries.py) contains all the SQL queries used in the ETL pipeline including create table statements, copy statements for the staging tables and insert statements
-4. [create_tables.py](./create_tables.py) contains the steps necessary to create the database and underlying tables.  Run this command like this: `python create_tables.py`
-5. [etl.py](./etl.py) is the main ETL code that processes the raw data and structures it into the database tables
+3. [etl.py](./etl.py) is the main ETL code that processes the raw data and structures it into the database tables
 
 ## Configuration
 ```
