@@ -64,55 +64,32 @@ The unneccessary columns/joins can be removed and the relevant group by and aggr
 ## Technical details
 #### What's in this repository?
 1. [dl.cfg](./dl.cfg) contains the configuration settings for the database. More on config later.
-2. [infrastructure_as_code.py](./infrastructure_as_code.py) contains all the steps to set up the necessary infrastructure (Redshift cluster, AWS Role with attached policies, etc.)
+2. [infrastructure_as_code.py](./infrastructure_as_code.py) is a helper function to create s3 bucket and keys.  Be sure to edit the file with your own bucket credentials if you wish to implement it.                        
 3. [etl.py](./etl.py) is the main ETL code that processes the raw data and structures it into the database tables
+4. [ajcloete-sparkify.ipynb](./ajcloete-sparkify.ipynb) is the notebook run on the AWS EMR cluster to ensure that all steps run without errors.
+5. [data](./data/) a folder containing sample data for local testing.
 
-## Configuration
+#### infrastructure_as_code.py example
+```import infrastructure_as_code as iac
+iac.create_s3_structure(iac.boto3.resource('s3', region_name='us-west-2'), 
+                        bucket_root='your-bucket', keys = ['songs','songplays','time','artists','users'])```
+
+## Configuration (dl.cfg)
 ```
-[CLUSTER]
-host = redshift-cluster.cqipuvtyifkz.us-west-2.redshift.amazonaws.com
-db_name = dwh
-db_user = dwhuser
-db_password = dwhPassw0rd123
-db_port = 5439
-db_cluster_identifier = redshift-cluster
-db_cluster_type = multi-node
-db_num_nodes = 4
-db_node_type = dc2.large
-db_security_group = 'redshift-sg'
-db_role_arn = arn:aws:iam::XXXXXXXXXXXX:role/myRedshiftRole
-
-[IAM_ROLE]
-iam_role_name = myRedshiftRole
-
-[S3]
-log_data = 's3://udacity-dend/log_data'
-log_jsonpath = 's3://udacity-dend/log_json_path.json'
-song_data = 's3://udacity-dend/song_data'
-
 [AWS]
-key =
-secret =
-region = 'us-west-2'
+aws_access_key_id = 
+aws_secret_access_key = 
 ```
-#### You have one of two options to run the project:
-- provide AWS access keys to run infrastructure as code section by either:
-  - Setting the environment varaibles AWS_KEY and AWS_SECRET
-  - Populating the [AWS] section in `dwh.cfg`
-- provide the cluster details (all fields in [CLUSTER] section completed)
+Ensure that you either complete the details in dl.cfg or ensure that your environment variables contain configurations for:
+- AWS_ACCESS_KEY_ID
+- AWS_SECRET_ACCESS_KEY
+```
 
-## Running
-If you provided the AWS credentials you can optionally run the following two commands:
->`python infrastructure_as_code.py create` to create the infrastructure.
+## Running the code
+Depending on where you're running the code, it will need some tweaking to work correctly.  
+If you're running it locally, you have to remove the config step from the create_spark_session function
+You will also need to change the input_data and output_data to point to local destinations.
 
->`python infrastructure_as_code.py clean` to remove the infrastructure created.
-
-To run the project, run the following two commands (in sequence):
->`python create_tables.py`
-
->'python etl.py`
-
-_*If you provided the AWS credentials, you'll notice a self-destruct function once the etl.py function as completed.  You may opt to wait 30 seconds to let it delete the infrastructure automatically or you can cancel the process to keep the infrastructure up and running.*_
 
 ### Credits
 The images in this README has been generated from the wonderful package [dbvis](https://www.dbvis.com)
