@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 import os
 from airflow import DAG
+from airflow import conf
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.postgres_operator import PostgresOperator
 from airflow.operators import (StageToRedshiftOperator, LoadFactOperator,
@@ -29,7 +30,7 @@ with DAG('sparkify-dag',
     start_operator = DummyOperator(task_id='Begin_execution')
     
     # Read the create_tables.sql helper for use in task
-    with open('create_tables.sql')) as f:
+    with open(os.path.join(conf.get('core','dags_folder'),'create_tables.sql')) as f:
         create_tables_query = f.read()
     create_tables_task = PostgresOperator(
         task_id='Create_tables',
