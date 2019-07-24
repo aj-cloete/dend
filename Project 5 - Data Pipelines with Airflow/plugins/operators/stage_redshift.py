@@ -3,6 +3,17 @@ from airflow.models import BaseOperator
 from airflow.utils.decorators import apply_defaults
 
 class StageToRedshiftOperator(BaseOperator):
+    '''
+    Operator loads any JSON formatted files from S3 to Amazon Redshift.
+    table (string): [required] The name of the Amazon Redshift table into which the data should be loaded
+    s3_key (string): [required] The S3 key (within the s3_bucket) where the files to be copied to Amazon Redshift is located
+    redshift_conn_id (string): [required] Airflow conn_id of Redshift connection
+    s3_bucket (string): The bucket where the files to be copied is located (Default: udacity-dend)
+    json_option (string): The json option specified in the copy statement.  If left on the default, CSV format assumed. (Default: '')
+    aws_credentials_id (string): Airflow conn_id of the aws_credentials granting access to s3 (Default: 'aws_credentials')
+    delimiter (string): delimiter character used in copy statement - ignored if json_object is not empty (Default: ',')
+    ignore_headers (int): ignore headers in copy statement - ignored if json_object is not empty (1 -> true, 0 -> false) (Default: 1)
+    '''
     ui_color = '#358140'
     template_fields = ("s3_key","json_option",)
     copy_sql = {}
@@ -26,12 +37,12 @@ JSON '{json_option}'
     def __init__(self,
                  table,
                  s3_key,
-                 redshift_conn_id="redshift",
-                 aws_credentials_id="aws_credentials",
+                 redshift_conn_id,
                  s3_bucket="udacity-dend",
+                 json_option='',
+                 aws_credentials_id="aws_credentials",
                  delimiter=",",
                  ignore_headers=1,
-                 json_option='',
                  *args, **kwargs):
 
         super(StageToRedshiftOperator, self).__init__(*args, **kwargs)
@@ -50,9 +61,9 @@ JSON '{json_option}'
         redshift = PostgresHook(postgres_conn_id=self.redshift_conn_id)
 
         self.log.info("Clearing data from destination Redshift table")
-        redshift.run("DELETE FROM {}".format(self.table))
+        redshift.run("TRUNCATE {}".format(self.table))
 
-        self.log.info("Copying data from S3 to Redshift")
+        self.log.info(f"Copying data from S3 to Redshift table '{self.table}'")
         rendered_key = self.s3_key.format(**context)
         s3_path = "s3://{}/{}".format(self.s3_bucket, rendered_key)
         copy_sql = StageToRedshiftOperator.copy_sql['csv'] if not self.json_option \
@@ -68,3 +79,6 @@ JSON '{json_option}'
         }
         formatted_sql = copy_sql.format(**copy_params)
         redshift.run(formatted_sql)
+        
+        self.log.info(f"Copying data from S3 to Redshift table '{self.table}' successful")
+
