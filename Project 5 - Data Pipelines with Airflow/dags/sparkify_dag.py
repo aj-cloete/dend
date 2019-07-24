@@ -43,6 +43,7 @@ with DAG('sparkify-dag',
         task_id='Stage_events',
         table='staging_events',
         s3_key="log_data",
+        redshift_conn_id='redshift',
         json_option='s3://udacity-dend/log_json_path.json',
     )
 
@@ -50,31 +51,55 @@ with DAG('sparkify-dag',
         task_id='Stage_songs',
         table='staging_songs',
         s3_key='song_data',
-        json_option='auto'
+        redshift_conn_id='redshift',
+        json_option='auto',
     )
 
     load_songplays_table = LoadFactOperator(
         task_id='Load_songplays_fact_table',
+        sql_statement=SqlQueries.songplay_table_insert,
+        target_db_conn_id='redshift',
+        target_table='songplays',
     )
 
     load_user_dimension_table = LoadDimensionOperator(
         task_id='Load_user_dim_table',
+        sql_statement=SqlQueries.user_table_insert,
+        target_db_conn_id='redshift',
+        target_table='users',
     )
 
     load_song_dimension_table = LoadDimensionOperator(
         task_id='Load_song_dim_table',
+        sql_statement=SqlQueries.song_table_insert,
+        target_db_conn_id='redshift',
+        target_table='songs',
     )
 
     load_artist_dimension_table = LoadDimensionOperator(
         task_id='Load_artist_dim_table',
+        sql_statement=SqlQueries.artist_table_insert,
+        target_db_conn_id='redshift',
+        target_table='artists',
     )
 
     load_time_dimension_table = LoadDimensionOperator(
         task_id='Load_time_dim_table',
+        sql_statement=SqlQueries.time_table_insert,
+        target_db_conn_id='redshift',
+        target_table='time',
     )
-
+    
+    # Test section
+    tests = [f'select count(1) from {table} where {col} notnull' \
+             for (table,col) in zip(['songplays','users','songs','artists','time'], \
+                                    ['songplay_id','userid','song_id','artist_id','start_time'])]
+    expectations = ['0','0','0','0','0']
     run_quality_checks = DataQualityOperator(
         task_id='Run_data_quality_checks',
+        conn_id='redshift',
+        sql_test=tests,
+        expected_result=expectations,
     )
 
     end_operator = DummyOperator(task_id='Stop_execution')
@@ -92,5 +117,4 @@ start_operator \
     >> load_dims \
     >> run_quality_checks \
     >> end_operator
-
 
