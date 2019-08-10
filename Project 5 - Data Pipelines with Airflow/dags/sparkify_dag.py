@@ -91,7 +91,7 @@ with DAG('sparkify-dag',
     )
     
     # Test section
-    tests = [f'select count(1) from {table} where {col} notnull' \
+    tests = [f'select count(1) from {table} where {col} is null' \
              for (table,col) in zip(['songplays','users','songs','artists','time'], \
                                     ['songplay_id','userid','song_id','artist_id','start_time'])]
     expectations = ['0','0','0','0','0']
