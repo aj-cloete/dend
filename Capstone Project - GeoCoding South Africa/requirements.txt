@@ -1,0 +1,6 @@
+boto3
+geopandas
+numpy
+pandas
+pyarrow
+s3fs
