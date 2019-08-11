@@ -8,8 +8,8 @@ This aim of this project is to provide a lookup dataset onto which one can join 
 Access to such a dataset means that it can be housed in a relational database and the information will be a standard SQL join away.
 
 ## Requirements
-This project is built to run within the Udacity workspace environment using the helper script `setup.sh` which can be executed by either simply `./setup.sh` or `/bin/bash setup.sh`. **Do not run this script if you don't need to**
-Also ensure that you run `source capstone/bin/activate` before running the other python files to ensure you're in the right environment.
+This project is built to run within the Udacity workspace environment using the helper script `setup.sh` which can be executed by either simply `./setup.sh` or `/bin/bash setup.sh`. **Do not run this script if you don't need to**.  
+Once the setup script completes, ensure that you run `source capstone/bin/activate` before running the other python files to ensure that the right environment is active.
 
-Activating an environment and installing the requirements from using `pip install -r requirements.txt` should suffice in most situations.  If you're using __*anaconda*__, though, you're on your own.
+For most other applications, activating a new environment and installing the requirements using `pip install -r requirements.txt` should suffice.  If you're using __*anaconda*__, though, you're on your own.
 
