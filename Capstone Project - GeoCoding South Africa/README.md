@@ -13,3 +13,6 @@ Once the setup script completes, ensure that you run `source capstone/bin/activa
 
 For most other applications, activating a new environment and installing the requirements using `pip install -r requirements.txt` should suffice.  If you're using __*anaconda*__, though, you're on your own.
 
+## Raw data
+To get the raw data, simply run `./get_data.sh` or `bash get_data.sh`.  The script will create a folder **data** containing the raw data used in this project.  
+**to-do:** list sources websites.
