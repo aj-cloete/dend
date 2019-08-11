@@ -1,4 +1,10 @@
 #!/bin/bash
+set -x
+
+_MY_SCRIPT="${BASH_SOURCE[0]}"
+BASEDIR=$(cd "$(dirname "$_MY_SCRIPT")" && pwd)
+_UNAME_OUT=$(uname -s)
+
 # Prepare the data
 mkdir data
 
