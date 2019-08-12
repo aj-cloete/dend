@@ -43,3 +43,5 @@ source $BASEDIR/capstone/bin/activate
 pip install -r requirements.txt --upgrade
 
 /bin/bash $BASEDIR/get_data.sh
+
+echo remember to activate the environment using: source capstone/bin/activate

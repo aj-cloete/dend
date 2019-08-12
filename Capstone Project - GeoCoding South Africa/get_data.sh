@@ -25,5 +25,17 @@ wget -nc -O $BASEDIR/data/mdb2009.zip "https://www.arcgis.com/sharing/rest/conte
   && unzip -o -d $BASEDIR/data $BASEDIR/data/mdb2009.zip \
   && mv $BASEDIR/data/MDBDistrictMunicipalBoundary2009.gdb $BASEDIR/data/MDBWard2009.gdb
 
-set -e
-source $BASEDIR/capstone/bin/activate
+# South Africa geonames data
+wget -nc -O $BASEDIR/data/ZA.zip "https://download.geonames.org/export/dump/ZA.zip" \
+  && unzip -o -d $BASEDIR/data $BASEDIR/data/ZA.zip \
+  && mv $BASEDIR/data/readme.txt $BASEDIR/data/geonames_readme.txt \
+  && mv $BASEDIR/data/ZA.txt $BASEDIR/data/geonames.tsv
+
+# Feature code lookup data
+wget -nc -O $BASEDIR/data/geonames_features.tsv "https://download.geonames.org/export/dump/featureCodes_en.txt"
+
+# Postal codes
+wget -nc -O $BASEDIR/data/postal_codes.zip "https://download.geonames.org/export/zip/ZA.zip" \
+  && unzip -o $BASEDIR/data/postal_codes.zip -d $BASEDIR/data/ \
+  && mv $BASEDIR/data/readme.txt $BASEDIR/data/postal_codes_readme.txt \
+  && mv $BASEDIR/data/ZA.txt $BASEDIR/data/postal_codes.tsv
