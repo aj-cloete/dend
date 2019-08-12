@@ -37,11 +37,11 @@ fi
 
 cd $BASEDIR
 /usr/local/bin/python3.7 -m venv capstone
-source $BASEDIR/capstone/bin/activate
+source "${BASEDIR}/capstone/bin/activate"
 
 # Install the required packages
 pip install -r requirements.txt --upgrade
 
-/bin/bash $BASEDIR/get_data.sh
+/bin/bash "${BASEDIR}/get_data.sh"
 
 echo remember to activate the environment using: source capstone/bin/activate
