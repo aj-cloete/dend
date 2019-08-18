@@ -1,6 +1,11 @@
 boto3
+fiona
 geopandas
 numpy
-pandas
+pandas==0.24.2
 pyarrow
+pyproj
+rtree
 s3fs
+shapely
+six
