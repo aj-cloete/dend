@@ -6,6 +6,7 @@ At the time of writing, I could not find a good source with accurate information
 The only feasible way of getting to that information from a set of latitude and longitude values is via an API - something that is not ideal when working with databases.
 This aim of this project is to provide a lookup dataset onto which one can join with a (truncated) set of latitude/longitude values to obtain the information mentioned above.
 Access to such a dataset means that it can be housed in a relational database and the information will be a standard SQL join away.
+![South Africa Grid](./South_Africa_grid_example.png)
 
 ## Requirements
 This project is built to run within the Udacity workspace environment using the helper script `setup.sh` which can be executed by either simply `./setup.sh` or `/bin/bash setup.sh`. **Do not run this script if you don't need to**.  
@@ -84,16 +85,16 @@ wards_pc = gpd.sjoin(pc_geo, wards, op='within')
 ## About South African Geography
 South Africa is a relatively large country in the South of Africa.  The mainland (i.e. not including islands) is bounded by the a rectangle drawn through these points: 
 ```
-zar_bounding_box = 
-{'se': (-35,33.5)
- 'nw': (-22,15.9)
- 'ne': (-22,33.5)
- 'sw': (-35,15.9)}
-zar_lat_long_extremities =
-{'s': {'latitude': -35}
- 'n': {'latitude': -22}
- 'e': {'longitude': 33.5}
- 'w': {'longitude': 15.9}
+zar_bounding_box = {
+'se': (-35,33.5),
+'nw': (-22,15.9),
+'ne': (-22,33.5),
+'sw': (-35,15.9),}
+zar_lat_long_extremities = {
+'s': {'longitude': -35},
+'n': {'longitude': -22},
+'e': {'latitude': 33.5},
+'w': {'latitude': 15.9},
 }
 ```
 
